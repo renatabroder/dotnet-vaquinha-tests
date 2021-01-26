@@ -1,18 +1,14 @@
-# dotnet-vaquinha-tests
+## dotnet-vaquinha-tests
 Projeto Base para Testes - .Net Core  
 
-## Digital Innovation One
+O projeto base da Vaquinha Online consiste em uma sistema para doações a determinadas instituições. Há uma meta de arrecadação e a listagem de todos os doadores (anônimos ou não). Para doar, o doador preenche um formulário inserindo seus dados pessoais e os dados de cartão de crédito, que tem seus *inputs* validados.
 
-[Clique aqui para se inscrever na Digital Innovation One](https://digitalinnovation.one/sign-up?ref=H395IYS4Z6)  
+O projeto original foi alterado para incluir a regra de que o doador tem de ser o titular do cartão.
 
-## Eliézer Zarpelão
-[GitHub Timeline](https://elizarp.github.io/timeline/)  
-[Linkedin](http://br.linkedin.com/in/eliezerzarpelao)  
-[Github](https://github.com/elizarp) 
 
-## Marcos Freire
-[Linkedin](https://www.linkedin.com/in/marcos-freire-a73891125/)  
-[Github](https://github.com/marcosfreire) 
 
-## Slides
-[Slides em PDF](TesteNetCore.pdf)
+
+# Criadores do projeto base:
+[Eliézer Zarpelão](https://github.com/elizarp) 
+
+[Marcos Freire](https://github.com/marcosfreire)
