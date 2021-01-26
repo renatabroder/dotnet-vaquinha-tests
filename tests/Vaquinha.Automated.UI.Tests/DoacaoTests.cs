@@ -49,7 +49,7 @@ namespace Vaquinha.AutomatedUITests
 			//Arrange
 			var doacao = _doacaoFixture.DoacaoValida();
             doacao.AdicionarEnderecoCobranca(_enderecoFixture.EnderecoValido());
-            doacao.AdicionarFormaPagamento(_cartaoCreditoFixture.CartaoCreditoValido());
+            doacao.AdicionarFormaPagamento(_cartaoCreditoFixture.CartaoCreditoValido(doacao.DadosPessoais.Nome));
 			_driverFactory.NavigateToUrl("https://vaquinha.azurewebsites.net/");
 			_driver = _driverFactory.GetWebDriver();
 

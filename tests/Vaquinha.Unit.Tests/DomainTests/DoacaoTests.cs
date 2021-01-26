@@ -27,7 +27,7 @@ namespace Vaquinha.Unit.Tests.DomainTests
             // Arrange
             var doacao = _doacaoFixture.DoacaoValida();
             doacao.AdicionarEnderecoCobranca(_enderecoFixture.EnderecoValido());
-            doacao.AdicionarFormaPagamento(_cartaoCreditoFixture.CartaoCreditoValido());
+            doacao.AdicionarFormaPagamento(_cartaoCreditoFixture.CartaoCreditoValido(doacao.DadosPessoais.Nome));
 
             // Act
             var valido = doacao.Valido();
@@ -45,7 +45,7 @@ namespace Vaquinha.Unit.Tests.DomainTests
             const bool EMAIL_INVALIDO = true;
             var doacao = _doacaoFixture.DoacaoValida(EMAIL_INVALIDO);
             doacao.AdicionarEnderecoCobranca(_enderecoFixture.EnderecoValido());
-            doacao.AdicionarFormaPagamento(_cartaoCreditoFixture.CartaoCreditoValido());
+            doacao.AdicionarFormaPagamento(_cartaoCreditoFixture.CartaoCreditoValido(doacao.DadosPessoais.Nome));
 
             // Act
             var valido = doacao.Valido();
@@ -69,7 +69,7 @@ namespace Vaquinha.Unit.Tests.DomainTests
             // Arrange            
             var doacao = _doacaoFixture.DoacaoValida(false, valorDoacao);
             doacao.AdicionarEnderecoCobranca(_enderecoFixture.EnderecoValido());
-            doacao.AdicionarFormaPagamento(_cartaoCreditoFixture.CartaoCreditoValido());
+            doacao.AdicionarFormaPagamento(_cartaoCreditoFixture.CartaoCreditoValido(doacao.DadosPessoais.Nome));
 
             // Act
             var valido = doacao.Valido();
@@ -90,10 +90,10 @@ namespace Vaquinha.Unit.Tests.DomainTests
         public void Doacao_ValoresDoacaoMaiorLimite_DoacaoInvalida(double valorDoacao)
         {
             // Arrange
-            const bool EXCEDER_MAX_VALOR_DOACAO = true;
+            //const bool EXCEDER_MAX_VALOR_DOACAO = true;
             var doacao = _doacaoFixture.DoacaoValida(false, valorDoacao);
             doacao.AdicionarEnderecoCobranca(_enderecoFixture.EnderecoValido());
-            doacao.AdicionarFormaPagamento(_cartaoCreditoFixture.CartaoCreditoValido());
+            doacao.AdicionarFormaPagamento(_cartaoCreditoFixture.CartaoCreditoValido(doacao.DadosPessoais.Nome));
 
             // Act
             var valido = doacao.Valido();
@@ -112,7 +112,7 @@ namespace Vaquinha.Unit.Tests.DomainTests
             const bool EXCEDER_MAX_LENTH_MENSAGEM_APOIO = true;
             var doacao = _doacaoFixture.DoacaoValida(false, null, EXCEDER_MAX_LENTH_MENSAGEM_APOIO);
             doacao.AdicionarEnderecoCobranca(_enderecoFixture.EnderecoValido());
-            doacao.AdicionarFormaPagamento(_cartaoCreditoFixture.CartaoCreditoValido());
+            doacao.AdicionarFormaPagamento(_cartaoCreditoFixture.CartaoCreditoValido(doacao.DadosPessoais.Nome));
 
             // Act
             var valido = doacao.Valido();
@@ -130,7 +130,7 @@ namespace Vaquinha.Unit.Tests.DomainTests
             // Arrange
             var doacao = _doacaoFixture.DoacaoInvalida(false);
             doacao.AdicionarEnderecoCobranca(_enderecoFixture.EnderecoValido());
-            doacao.AdicionarFormaPagamento(_cartaoCreditoFixture.CartaoCreditoValido());
+            doacao.AdicionarFormaPagamento(_cartaoCreditoFixture.CartaoCreditoValido(doacao.DadosPessoais.Nome));
 
             // Act
             var valido = doacao.Valido();
@@ -152,7 +152,7 @@ namespace Vaquinha.Unit.Tests.DomainTests
             // Arrange
             var doacao = _doacaoFixture.DoacaoInvalida(true);
             doacao.AdicionarEnderecoCobranca(_enderecoFixture.EnderecoValido());
-            doacao.AdicionarFormaPagamento(_cartaoCreditoFixture.CartaoCreditoValido());
+            doacao.AdicionarFormaPagamento(_cartaoCreditoFixture.CartaoCreditoValido(doacao.DadosPessoais.Nome));
 
             // Act
             var valido = doacao.Valido();
@@ -164,6 +164,61 @@ namespace Vaquinha.Unit.Tests.DomainTests
 
             doacao.ErrorMessages.Should().Contain("Valor mínimo de doação é de R$ 5,00", because: "valor mínimo de doação nao foi atingido.");            
             doacao.ErrorMessages.Should().Contain("O campo Email é obrigatório.", because: "o campo Email não foi informado.");            
+        }
+
+
+        [Fact]
+        [Trait("Doacao", "Doacao_UsuarioAceitaDoarComTaxa_DoacaoValida")]
+        public void Doacao_UsuarioAceitaDoarComTaxa_DoacaoValida()
+        {           
+            // Arrange
+            var doacao = _doacaoFixture.DoacaoValida(false, 5, false, true);
+            doacao.AdicionarEnderecoCobranca(_enderecoFixture.EnderecoValido());
+            doacao.AdicionarFormaPagamento(_cartaoCreditoFixture.CartaoCreditoValido(doacao.DadosPessoais.Nome));
+            doacao.AdicionarAceitaTaxa(true);
+
+            // Act
+            var valido = doacao.Valido();
+
+            // Assert
+            doacao.Valor.Should().Be(6, because: "valor com taxa de 20%");
+
+        }
+
+
+        [Fact]
+        [Trait("Doacao", "Doacao_DoadorTitularDoCartao_DoacaoValida")]
+        public void Doacao_DoadorTitularDoCartao_DoacaoValida()
+        {           
+            // Arrange
+            var doacao = _doacaoFixture.DoacaoValida(false, 5, false, true);
+            doacao.AdicionarEnderecoCobranca(_enderecoFixture.EnderecoValido());
+            doacao.AdicionarFormaPagamento(_cartaoCreditoFixture.CartaoCreditoValido(doacao.DadosPessoais.Nome));
+            doacao.AdicionarAceitaTaxa(true);
+
+            // Act
+            var valido = doacao.Valido();
+
+            // Assert
+            valido.Should().Be(true, because: "doador deve ser titular do cartão");
+        }
+
+
+        [Fact]
+        [Trait("Doacao", "Doacao_DoadorTitularDoCartao_DoacaoInValida")]
+        public void Doacao_DoadorTitularDoCartao_DoacaoInValida()
+        {           
+            // Arrange
+            var doacao = _doacaoFixture.DoacaoValida(false, 5, false, true);
+            doacao.AdicionarEnderecoCobranca(_enderecoFixture.EnderecoValido());
+            doacao.AdicionarFormaPagamento(_cartaoCreditoFixture.CartaoCreditoValido(""));
+            doacao.AdicionarAceitaTaxa(true);
+
+            // Act
+            var valido = doacao.Valido();
+
+            // Assert
+            valido.Should().Be(false, because: "doador deve ser titular do cartão");
         }
 
     }

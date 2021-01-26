@@ -25,15 +25,18 @@ namespace Vaquinha.Tests.Common.Fixtures
             return faker.Generate();
         }
 
-        public CartaoCredito CartaoCreditoValido()
+        public CartaoCredito CartaoCreditoValido(string fullName)
         {
             var cartaoCredito = new Faker("pt_BR").Finance;
             var pessoa = new Faker("pt_BR").Person;
 
+            var nome = fullName != "" ? fullName : pessoa.FullName;
+
             var faker = new Faker<CartaoCredito>("pt_BR");
 
+            
             faker.CustomInstantiator(f =>
-                 new CartaoCredito(pessoa.FullName, cartaoCredito.CreditCardNumber(), "06/28", cartaoCredito.CreditCardCvv()));
+                 new CartaoCredito(nome, cartaoCredito.CreditCardNumber(), "06/28", cartaoCredito.CreditCardCvv()));
 
             return faker.Generate();
         }

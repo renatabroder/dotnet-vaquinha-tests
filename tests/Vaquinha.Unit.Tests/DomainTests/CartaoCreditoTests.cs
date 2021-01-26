@@ -22,7 +22,7 @@ namespace Vaquinha.Unit.Tests.DomainTests
         public void CartaoCredito_CorretamentePreenchido_CartaoCreditoValido()
         {
             // Arrange
-            var cartaoCredito = _fixture.CartaoCreditoValido();
+            var cartaoCredito = _fixture.CartaoCreditoValido("");
 
             // Act
             var valido = cartaoCredito.Valido();

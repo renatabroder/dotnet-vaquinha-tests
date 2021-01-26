@@ -51,7 +51,7 @@ namespace Vaquinha.Unit.Tests.ControllerTests
 
             _doacaoValida = doacaoFixture.DoacaoValida();
             _doacaoValida.AdicionarEnderecoCobranca(enderecoFixture.EnderecoValido());
-            _doacaoValida.AdicionarFormaPagamento(cartaoCreditoFixture.CartaoCreditoValido());
+            _doacaoValida.AdicionarFormaPagamento(cartaoCreditoFixture.CartaoCreditoValido(_doacaoValida.DadosPessoais.Nome));
 
             _doacaoModelValida = doacaoFixture.DoacaoModelValida();
             _doacaoModelValida.EnderecoCobranca = enderecoFixture.EnderecoModelValido();
